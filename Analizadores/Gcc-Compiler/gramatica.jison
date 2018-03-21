@@ -17,6 +17,17 @@
 "^"                   return 'potencia'
 "("                   return 'abrePar'
 ")"                   return 'cierraPar'
+"||"                   return 'or'
+"&&"                   return 'and'
+"??"                   return 'xor'
+"!"                   return 'not'
+
+"<"                   return 'menor'
+">"                   return 'mayor'
+"<="                   return 'menorIgual'
+">="                   return 'mayorIgual'
+"=="                   return 'igualIgual'
+"!="                   return 'distintoA'
 
 <<EOF>>               return 'EOF'
 .                     return 'INVALID'
@@ -38,16 +49,34 @@
 INICIO: SIMB_ARIT EOF{return $1;};
 
 
-TIPO_VARIABLE: entero
-	|decimal
+TIPO_VARIABLE: entero{$$ = new Entero($1);}
+	|decimal{$$ = new Decimal($1);}
 	|caracter
 	|booleano;
 
 SIMB_ARIT: mas{$$ =$1;}
 	|menos{$$ = $1;}
-	|por{$$ = "*";}
-	|division{$$ = "/";}
-	|potencia{$$ = "^";};
+	|por{$$ = $1;}
+	|division{$$ = $1;}
+	|potencia{$$ = $1;};
+
+SIMB_LOG: and{$$ =$1;}
+	|or{$$ =$1;}
+	|xor{$$ =$1;};
+
+SIMB_REL: menor{$$ =$1;}
+	|mayor{$$ =$1;}
+	|menorIgual{$$ =$1;}
+	|mayorIgual{$$ =$1;}
+	|igualIgual{$$ =$1;}
+	|igualIgual{$$ =$1;}
+	|distintoA{$$ =$1;};
+
+
+
+
+
+
 
 
 	

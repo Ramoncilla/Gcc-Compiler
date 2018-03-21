@@ -75,9 +75,9 @@ var gramatica = (function(){
 var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o};
 var parser = {trace: function trace() { },
 yy: {},
-symbols_: {"error":2,"INICIO":3,"SIMB_ARIT":4,"EOF":5,"TIPO_VARIABLE":6,"entero":7,"decimal":8,"caracter":9,"booleano":10,"mas":11,"menos":12,"por":13,"division":14,"potencia":15,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",7:"entero",8:"decimal",9:"caracter",10:"booleano",11:"mas",12:"menos",13:"por",14:"division",15:"potencia"},
-productions_: [0,[3,2],[6,1],[6,1],[6,1],[6,1],[4,1],[4,1],[4,1],[4,1],[4,1]],
+symbols_: {"error":2,"INICIO":3,"SIMB_ARIT":4,"EOF":5,"TIPO_VARIABLE":6,"entero":7,"decimal":8,"caracter":9,"booleano":10,"mas":11,"menos":12,"por":13,"division":14,"potencia":15,"SIMB_LOG":16,"and":17,"or":18,"xor":19,"SIMB_REL":20,"menor":21,"mayor":22,"menorIgual":23,"mayorIgual":24,"igualIgual":25,"distintoA":26,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",7:"entero",8:"decimal",9:"caracter",10:"booleano",11:"mas",12:"menos",13:"por",14:"division",15:"potencia",17:"and",18:"or",19:"xor",21:"menor",22:"mayor",23:"menorIgual",24:"mayorIgual",25:"igualIgual",26:"distintoA"},
+productions_: [0,[3,2],[6,1],[6,1],[6,1],[6,1],[4,1],[4,1],[4,1],[4,1],[4,1],[16,1],[16,1],[16,1],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -86,20 +86,17 @@ switch (yystate) {
 case 1:
 return $$[$0-1];
 break;
-case 6:
+case 2:
+this.$ = new Entero($$[$0]);
+break;
+case 3:
+this.$ = new Decimal($$[$0]);
+break;
+case 6: case 11: case 12: case 13: case 14: case 15: case 16: case 17: case 18: case 19: case 20:
 this.$ =$$[$0];
 break;
-case 7:
+case 7: case 8: case 9: case 10:
 this.$ = $$[$0];
-break;
-case 8:
-this.$ = "*";
-break;
-case 9:
-this.$ = "/";
-break;
-case 10:
-this.$ = "^";
 break;
 }
 },
@@ -605,14 +602,34 @@ case 11:return 'abrePar'
 break;
 case 12:return 'cierraPar'
 break;
-case 13:return 5
+case 13:return 18
 break;
-case 14:return 'INVALID'
+case 14:return 17
+break;
+case 15:return 19
+break;
+case 16:return 'not'
+break;
+case 17:return 21
+break;
+case 18:return 22
+break;
+case 19:return 23
+break;
+case 20:return 24
+break;
+case 21:return 25
+break;
+case 22:return 26
+break;
+case 23:return 5
+break;
+case 24:return 'INVALID'
 break;
 }
 },
-rules: [/^(?:\s+)/,/^(?:[0-9]+(\.[0-9]+)?\b)/,/^(?:[0-9]+)/,/^(?:'([0-9]|[a-zA-Z])')/,/^(?:true\b)/,/^(?:false\b)/,/^(?:\*)/,/^(?:\/)/,/^(?:-)/,/^(?:\+)/,/^(?:\^)/,/^(?:\()/,/^(?:\))/,/^(?:$)/,/^(?:.)/],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],"inclusive":true}}
+rules: [/^(?:\s+)/,/^(?:[0-9]+(\.[0-9]+)?\b)/,/^(?:[0-9]+)/,/^(?:'([0-9]|[a-zA-Z])')/,/^(?:true\b)/,/^(?:false\b)/,/^(?:\*)/,/^(?:\/)/,/^(?:-)/,/^(?:\+)/,/^(?:\^)/,/^(?:\()/,/^(?:\))/,/^(?:\|\|)/,/^(?:&&)/,/^(?:\?\?)/,/^(?:!)/,/^(?:<)/,/^(?:>)/,/^(?:<=)/,/^(?:>=)/,/^(?:==)/,/^(?:!=)/,/^(?:$)/,/^(?:.)/],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24],"inclusive":true}}
 });
 return lexer;
 })();
