@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8"/>
+   </head>
+   <body>
+   	<script src="/home/ramonella/Documentos/Repositorios/Gcc-Compiler/Analizadores/Gcc-Compiler/Caracter.js"></script>
+       <script src="/home/ramonella/Documentos/Repositorios/Gcc-Compiler/Analizadores/Gcc-Compiler/Booleano.js"></script>
+       <script src="/home/ramonella/Documentos/Repositorios/Gcc-Compiler/Analizadores/Gcc-Compiler/Entero.js"></script>
+       <script src="/home/ramonella/Documentos/Repositorios/Gcc-Compiler/Analizadores/Gcc-Compiler/Decimal.js"></script>
+      <script src="/home/ramonella/Documentos/Repositorios/Gcc-Compiler/Analizadores/Gcc-Compiler/gramatica.js"></script>
+      <script type="text/javascript">
+         
+           var a = gramatica.parse("true");
+           
+           if(a instanceof Decimal){
+           
+           	 alert("es un decimal " + a.getNumero());
+
+           }
+           if (a instanceof Entero){
+           	
+           	alert("es un entero  "+ a.getNumero());
+
+           }
+
+           if(a instanceof Caracter){
+           	alert ("es un caracter "+ a.getCadenaCaracter() +" -> "+ a.getEnteroCaracter());
+           }
+
+           if(a instanceof Booleano){
+           	alert("es un bool "+ a.getCadenaBooleano()+" -> "+ a.getEnteroBooleano());
+
+           }
+
+
+		
+
+
+
+      </script>
+   </body>
+</html>

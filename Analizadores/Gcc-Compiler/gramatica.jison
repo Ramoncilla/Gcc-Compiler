@@ -1,11 +1,16 @@
+
+
 /* description: Parses end executes mathematical expressions. */
 
 /* lexical grammar */
 %lex
+
+
+
 %%
 
 \s+                   /* skip whitespace */
-[0-9]+("."[0-9]+)?\b  return 'decimal'
+[0-9]+("."[0-9]+)\b  return 'decimal'
 [0-9]+	              return 'entero'
 "'"([0-9]|[a-zA-Z])"'" return 'caracter'
 "true"		      return 'booleano'
@@ -46,13 +51,13 @@
 %% /* language grammar */
 
 
-INICIO: SIMB_ARIT EOF{return $1;};
+INICIO: TERMINAL_EXPRESION EOF{return $1;};
 
 
-TIPO_VARIABLE: entero{$$ = new Entero($1);}
-	|decimal{$$ = new Decimal($1);}
-	|caracter
-	|booleano;
+TERMINAL_EXPRESION: entero{var num = new Entero(); num.setNumero($1); $$= num;}
+	|decimal{var num = new Decimal(); num.setNumero($1); $$=num;}
+	|caracter{var car= new Caracter(); car.setValorCaracter($1); $$=car;}
+	|booleano{var bol= new Booleano(); bol.setValorBooleano($1); $$=bol;};
 
 SIMB_ARIT: mas{$$ =$1;}
 	|menos{$$ = $1;}

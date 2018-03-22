@@ -75,9 +75,9 @@ var gramatica = (function(){
 var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o};
 var parser = {trace: function trace() { },
 yy: {},
-symbols_: {"error":2,"INICIO":3,"SIMB_ARIT":4,"EOF":5,"TIPO_VARIABLE":6,"entero":7,"decimal":8,"caracter":9,"booleano":10,"mas":11,"menos":12,"por":13,"division":14,"potencia":15,"SIMB_LOG":16,"and":17,"or":18,"xor":19,"SIMB_REL":20,"menor":21,"mayor":22,"menorIgual":23,"mayorIgual":24,"igualIgual":25,"distintoA":26,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",7:"entero",8:"decimal",9:"caracter",10:"booleano",11:"mas",12:"menos",13:"por",14:"division",15:"potencia",17:"and",18:"or",19:"xor",21:"menor",22:"mayor",23:"menorIgual",24:"mayorIgual",25:"igualIgual",26:"distintoA"},
-productions_: [0,[3,2],[6,1],[6,1],[6,1],[6,1],[4,1],[4,1],[4,1],[4,1],[4,1],[16,1],[16,1],[16,1],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1]],
+symbols_: {"error":2,"INICIO":3,"TERMINAL_EXPRESION":4,"EOF":5,"entero":6,"decimal":7,"caracter":8,"booleano":9,"SIMB_ARIT":10,"mas":11,"menos":12,"por":13,"division":14,"potencia":15,"SIMB_LOG":16,"and":17,"or":18,"xor":19,"SIMB_REL":20,"menor":21,"mayor":22,"menorIgual":23,"mayorIgual":24,"igualIgual":25,"distintoA":26,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",6:"entero",7:"decimal",8:"caracter",9:"booleano",11:"mas",12:"menos",13:"por",14:"division",15:"potencia",17:"and",18:"or",19:"xor",21:"menor",22:"mayor",23:"menorIgual",24:"mayorIgual",25:"igualIgual",26:"distintoA"},
+productions_: [0,[3,2],[4,1],[4,1],[4,1],[4,1],[10,1],[10,1],[10,1],[10,1],[10,1],[16,1],[16,1],[16,1],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -87,10 +87,16 @@ case 1:
 return $$[$0-1];
 break;
 case 2:
-this.$ = new Entero($$[$0]);
+var num = new Entero(); num.setNumero($$[$0]); this.$= num;
 break;
 case 3:
-this.$ = new Decimal($$[$0]);
+var num = new Decimal(); num.setNumero($$[$0]); this.$=num;
+break;
+case 4:
+var car= new Caracter(); car.setValorCaracter($$[$0]); this.$=car;
+break;
+case 5:
+var bol= new Booleano(); bol.setValorBooleano($$[$0]); this.$=bol;
 break;
 case 6: case 11: case 12: case 13: case 14: case 15: case 16: case 17: case 18: case 19: case 20:
 this.$ =$$[$0];
@@ -100,8 +106,8 @@ this.$ = $$[$0];
 break;
 }
 },
-table: [{3:1,4:2,11:[1,3],12:[1,4],13:[1,5],14:[1,6],15:[1,7]},{1:[3]},{5:[1,8]},{5:[2,6]},{5:[2,7]},{5:[2,8]},{5:[2,9]},{5:[2,10]},{1:[2,1]}],
-defaultActions: {3:[2,6],4:[2,7],5:[2,8],6:[2,9],7:[2,10],8:[2,1]},
+table: [{3:1,4:2,6:[1,3],7:[1,4],8:[1,5],9:[1,6]},{1:[3]},{5:[1,7]},{5:[2,2]},{5:[2,3]},{5:[2,4]},{5:[2,5]},{1:[2,1]}],
+defaultActions: {3:[2,2],4:[2,3],5:[2,4],6:[2,5],7:[2,1]},
 parseError: function parseError(str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -578,15 +584,15 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:/* skip whitespace */
 break;
-case 1:return 8
+case 1:return 7
 break;
-case 2:return 7
+case 2:return 6
 break;
-case 3:return 9
+case 3:return 8
 break;
-case 4:return 10
+case 4:return 9
 break;
-case 5:return 10 	       
+case 5:return 9 	       
 break;
 case 6:return 13
 break;
@@ -628,7 +634,7 @@ case 24:return 'INVALID'
 break;
 }
 },
-rules: [/^(?:\s+)/,/^(?:[0-9]+(\.[0-9]+)?\b)/,/^(?:[0-9]+)/,/^(?:'([0-9]|[a-zA-Z])')/,/^(?:true\b)/,/^(?:false\b)/,/^(?:\*)/,/^(?:\/)/,/^(?:-)/,/^(?:\+)/,/^(?:\^)/,/^(?:\()/,/^(?:\))/,/^(?:\|\|)/,/^(?:&&)/,/^(?:\?\?)/,/^(?:!)/,/^(?:<)/,/^(?:>)/,/^(?:<=)/,/^(?:>=)/,/^(?:==)/,/^(?:!=)/,/^(?:$)/,/^(?:.)/],
+rules: [/^(?:\s+)/,/^(?:[0-9]+(\.[0-9]+)\b)/,/^(?:[0-9]+)/,/^(?:'([0-9]|[a-zA-Z])')/,/^(?:true\b)/,/^(?:false\b)/,/^(?:\*)/,/^(?:\/)/,/^(?:-)/,/^(?:\+)/,/^(?:\^)/,/^(?:\()/,/^(?:\))/,/^(?:\|\|)/,/^(?:&&)/,/^(?:\?\?)/,/^(?:!)/,/^(?:<)/,/^(?:>)/,/^(?:<=)/,/^(?:>=)/,/^(?:==)/,/^(?:!=)/,/^(?:$)/,/^(?:.)/],
 conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24],"inclusive":true}}
 });
 return lexer;
