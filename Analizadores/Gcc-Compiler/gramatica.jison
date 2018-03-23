@@ -5,6 +5,8 @@
 /* lexical grammar */
 %lex
 
+%options case-insensitive
+
 decimal [0-9]+("."[0-9]+)\b 
 entero [0-9]+	              
 caracter "'"([0-9]|[a-zA-Z])"'" 
@@ -87,6 +89,9 @@ id  ([a-zA-Z_])(([a-zA-Z_])|([0-9]))*
 "*="				return 'porIgual'
 "/="				return 'divIgual'
 "=" 				return 'igual'
+
+"++"	return 'masMas'
+"--" 	return 'menosMenos'
 	       
 "*"                   return 'por'
 "/"                   return 'division'
@@ -135,9 +140,22 @@ id  ([a-zA-Z_])(([a-zA-Z_])|([0-9]))*
 
 /* operator associations and precedence */
 
+
+
+%left or
+%left xor
+%left and
+%left not
+%left igualIgual distintoA menorIgual mayorIgual mayor menor
 %left mas menos
 %left por  division
 %left potencia
+%left masMas menosMenos
+%left abrePar
+
+
+
+
 
 
 %start INICIO
@@ -172,6 +190,23 @@ PARAMETROS: PARAMETRO
 
 LISTA_PARAMETROS : abrePar PARAMETROS cierraPar
 	|abrePar  cierraPar;
+
+
+VISIBILIDAD: publico 
+	|protegido
+	|privado;
+
+ATRIBUTO: VISIBILIDAD DECLARACION
+	|DECLARACION
+	|DECLA_LISTA
+	|DECLA_PILA
+	|DECLA_COLA
+	|ESTRUCTURA
+	|VISIBILIDAD DECLA_LISTA
+	|VISIBILIDAD DECLA_COLA
+	|VISIBILIDAD DECLA_PILA
+	|VISIBLIDAD ESTRUCTURA;
+
 
 FUNCION_SOBRE: arroba sobreescribir FUNCION;
 
@@ -211,7 +246,6 @@ SENTENCIA: DECLARACION
 	|IMPRIMIR
 	|ROMPER
 	|RETORNO
-	|EXPRESION
 	|CONTINUAR
 	|ESTRUCTURA
 	|INSERTA_LISTA
@@ -375,12 +409,6 @@ TIPO_DECLARACION: t_entero
 
 
 
-VISIBILIDAD: publico 
-	|protegido
-	|privado;
-
-ATRIBUTO: VISIBILIDAD DECLARACION
-	|DECLARACION;
 
 
 
@@ -404,7 +432,31 @@ EXPRESION: TERMINAL_EXPRESION
 	|LLAMADA
 	|OBTENER_LISTA
 	|INDICE_LISTA
-	|nulo;
+	|tamanioArreglo
+	|ARITMETICA
+	//|RELACIONAL
+	//|LOGICA
+	|NOT;
+	//|NEGATIVO
+	//|UNARIO;
+
+
+
+
+ARITMETICA : EXPRESION SIMB_ARIT EXPRESION;
+
+RELACIONAL : EXPRESION SIMB_REL EXPRESION;
+
+LOGICA : EXPRESION SIMB_LOG EXPRESION;
+
+NOT: not EXPRESION;
+
+NEGATIVO: menos EXPRESION;
+
+UNARIO: EXPRESION menosMenos
+	|EXPRESION masMas;
+
+
 
 
 CONVERTIR_A_CADENA: convertirACadena abrePar EXPRESION cierraPar puntoComa;
@@ -417,8 +469,8 @@ TERMINAL_EXPRESION: entero{var num = new Entero(); num.setNumero($1); $$= num;}
 	|caracter{var car= new Caracter(); car.setValorCaracter($1); $$=car;}
 	|booleano{var bol= new Booleano(); bol.setValorBooleano($1); $$=bol;}
 	|abrePar EXPRESION cierraPar
-	|tamanioArreglo {console.log("tamanio");}
-	|cadena;
+	|cadena
+	|nulo;
 
 
 SIMB_ARIT: mas{$$ =$1;}
