@@ -10,7 +10,7 @@ Booleano.prototype.valorEnteroBooleano=0;
 Booleano.prototype.setValorBooleano = function(valor) {
 	Booleano.prototype.valorCadenaBooleano = valor;
 	
-	if(valor.equalsIgnoreCase("true")){
+	if(valor.toUpperCase() == "TRUE"){
 		Booleano.prototype.valorEnteroBooleano=1;
 	}else{
 		Booleano.prototype.valorEnteroBooleano=0;
