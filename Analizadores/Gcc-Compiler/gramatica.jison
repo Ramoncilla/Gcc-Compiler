@@ -20,7 +20,7 @@ id  ([a-zA-Z_])(([a-zA-Z_])|([0-9]))*
 \s+                   /* skip whitespace */
 
 
-
+"tamanio" return 'tamanio'
 "Repetir_Mientras"  return 'Repetir_Mientras'
 "hacer" return 'hacer'
 "mientras" return 'mientras'
@@ -71,6 +71,7 @@ id  ([a-zA-Z_])(([a-zA-Z_])|([0-9]))*
 
 "hereda_de" return 'hereda_de'
 "clase" return 'clase'
+"este" return 'este'
 
 "puntero"		return 'puntero'
 "vacio" 	return 'vacio'
@@ -123,7 +124,7 @@ id  ([a-zA-Z_])(([a-zA-Z_])|([0-9]))*
 ";"      			return 'puntoComa'
 ":"					return 'dosPuntos'
 
-{tamanioArreglo} return 'tamanioArreglo'
+//{tamanioArreglo} return 'tamanioArreglo'
 
 \"(\\.|[^"])*\"			return 'cadena';
 
@@ -248,11 +249,11 @@ SENTENCIA: DECLARACION
 	|RETORNO
 	|CONTINUAR
 	|ESTRUCTURA
-	|INSERTA_LISTA
-	|APILAR
-	|DESAPILAR
-	|ENCOLAR
-	|DESENCOLAR
+	//|INSERTA_LISTA puntoComa
+	//|APILAR puntoComa
+	//|DESAPILAR puntoComa
+	//|ENCOLAR puntoComa
+	//|DESENCOLAR puntoComa
 	|DECLA_LISTA
 	|DECLA_PILA
 	|DECLA_COLA
@@ -265,26 +266,10 @@ SENTENCIA: DECLARACION
 	|REPETIR_CONTANDO
 	|ENCICLAR
 	|CONTADOR
-	|LEER_TECLADO;
+	|LEER_TECLADO
+	|ACCESO puntoComa
+	|ASIGNACION puntoComa;
 
-
-
-
-INSERTA_LISTA: id punto insertar abrePar EXPRESION cierraPar puntoComa;
-
-OBTENER_LISTA: id punto obtener abrePar EXPRESION cierraPar puntoComa;
-
-INDICE_LISTA: id punto buscar abrePar EXPRESION cierraPar puntoComa;
-
-
-
-APILAR: id punto Apilar abrePar EXPRESION cierraPar puntoComa;
-
-DESAPILAR: id punto Desapilar abrePar cierrPar puntoComa;
-
-ENCOLAR: id punto Encolar abrePar EXPRESION cierraPar puntoComa;
-
-DESENCOLAR: id punto Desencolar abrePar cierraPar puntoComa;
 
 DECLA_LISTA: Lista id igual nuevo Lista abrePar TIPO_EXPRESION cierraPar puntoComa;
 
@@ -294,14 +279,43 @@ DECLA_COLA: Cola id igual nuevo Cola abrePar TIPO_EXPRSEION cierraPar puntoComa;
 
 
 
+DECLARACION:  TIPO_DECLARACION id igual EXPRESION puntoComa
+	|TIPO_DECLARACION id puntoComa
+	|TIPO_DECLARACION id COL_ARREGLO puntoComa
+	|TIPO_DECLARACION id COL_ARREGLO igual EXPRESION puntoComa
+	|TIPO_DECLARACION id igual INSTANCIA puntoComa;
+
+
+ASIGNACION: id SIMB_IGUAL EXPRESION 
+	|id igual INSTANCIA
+	|ACCESO SIMB_IGUAL EXPRESION
+	|ACCESO igual INSTANCIA
+	|id masMas
+	|id menosMenos
+	|ACCESO masMas
+	|ACCESO menosMenos
+	|id COL_ARREGLO SIMB_IGUAL EXPRESION 
+	|este punto id SIMB_IGUAL EXPRESION 
+	|este punto id igual INSTANCIA
+	|este punto ACCESO SIMB_IGUAL EXPRESION
+	|este punto ACCESO igual INSTANCIA
+	|este punto id masMas
+	|este punto id menosMenos
+	|este punto ACCESO masMas
+	|este punto ACCESO menosMenos
+	|este punto id COL_ARREGLO SIMB_IGUAL EXPRESION ;
+
+
+
+INSTANCIA: nuevo id PARAMETROS_LLAMADA;
+
+SIMB_IGUAL: igual
+	|masIgual
+	|menosIgual
+	|porIgual
+	|divIgual;
 
 /*--------------------- Estrucuras de Control -------------------------*/
-
-
-
-
-
-
 
 
 SI_FALSO: Es_falso CUERPO_FUNCION;
@@ -360,13 +374,6 @@ LEER_TECLADO: Leer_Teclado abrePar EXPRESION coma id cierraPar puntoComa;
 
 
 
-
-DECLARACION:  TIPO_DECLARACION id igual EXPRESION puntoComa
-	|TIPO_DECLARACION id puntoComa
-	|TIPO_DECLARACION id COL_ARREGLO puntoComa;
-
-
-
 COL_ARREGLO: abreCor EXPRESION cierraCor
 	| COL_ARREGLO abreCor EXPRESION cierraCor;	
 
@@ -393,12 +400,6 @@ LISTA_DECLARACIONES: DECLARACION
 	|LISTA_DECLARACIONES DECLARACION;
 
 
-SIMB_IGUAL: igual
-	|masIgual
-	|menosIgual
-	|porIgual
-	|divIgual;
-
 
 TIPO_DECLARACION: t_entero
 	|t_caracter
@@ -407,96 +408,114 @@ TIPO_DECLARACION: t_entero
 	|id;
 
 
-
-
-
-
-
 /*--------------------------- Expresion ----------------------------------*/
 
+
+
+EXPRESION: LOGICA;
+
+LOGICA: LOGICA or XOR
+	|XOR;
+
+XOR: XOR xor AND
+	|AND;
+
+AND: AND and NOT
+	|NOT;
+
+NOT: not REL
+	|REL;
+
+REL: ARITMETICA SIMB_REL ARITMETICA
+	|ARITMETICA;
+
+SIMB_REL: menor
+	|mayor
+	|menorIgual
+	|mayorIgual
+	|distintoA
+	|igualIgual;
+
+ARITMETICA: ARITMETICA mas MUL
+	|ARITMETICA menos MUL
+	|MUL;
+
+MUL: MUL por POT
+	|MUL division POT
+	|POT;
+
+POT: UNARIO potencia POT
+	|UNARIO;
+
+UNARIO: NEG masMas
+	|NEG menosMenos
+	|NEG;	
+
+NEG: menos VALOR
+	|VALOR;
+
+VALOR: entero{var num = new Entero(); num.setNumero($1); $$= num;}
+	|decimal{var num = new Decimal(); num.setNumero($1); $$=num;}
+	|caracter{var car= new Caracter(); car.setValorCaracter($1); $$=car;}
+	|booleano{var bol= new Booleano(); bol.setValorBooleano($1); $$=bol;}
+	|abrePar EXPRESION cierraPar
+	|cadena
+	|nulo
+	|CONVERTIR_CADENA
+	|CONVERTIR_ENTERO
+	//|TAMANIO_ARREGLO
+	|id VALOR2
+	|ACCESO
+	|este punto ACCESO;	
+
+VALOR2: COL_ARREGLO
+|PARAMETROS_LLAMADA
+|;
+
+ACCESO: id punto ATRI;
+
+ATRI_:id
+	|id COL_ARREGLO
+	|id PARAMETROS_LLAMADA
+	|insertar abrePar EXPRESION cierraPar
+	|Apilar abrePar EXPRESION cierraPar
+	|Desapilar abrePar cierrPar
+	|Encolar abrePar EXPRESION cierraPar
+	|Desencolar abrePar cierraPar
+	|obtener abrePar EXPRESION cierraPar
+	|buscar abrePar EXPRESION cierraPar
+	|tamanio;
+	
+
+ATRI: ATRI_ 
+	|ATRI punto ATRI_;
+
 LISTA_EXPRESIONES: EXPRESION
-	|LISTA_EXPRESIONES EXPRESION;
+	|LISTA_EXPRESIONES coma EXPRESION;
 
 PARAMETROS_LLAMADA : abrePar cierraPar
 	|abrePar LISTA_EXPRESIONES cierraPar;
 
-LLAMADA: id PARAMETROS_LLAMADA;
 
-
-INSTANCIA: nuevo id PARAMETROS_LLAMADA;
-
-EXPRESION: TERMINAL_EXPRESION
-	|CONVERTIR_A_CADENA
-	|CONVERTIR_A_ENTERO
-	|INSTANCIA
-	|LLAMADA
-	|OBTENER_LISTA
-	|INDICE_LISTA
-	|tamanioArreglo
-	|ARITMETICA
-	//|RELACIONAL
-	//|LOGICA
-	|NOT;
-	//|NEGATIVO
-	//|UNARIO;
-
-
-
-
-ARITMETICA : EXPRESION SIMB_ARIT EXPRESION;
-
-RELACIONAL : EXPRESION SIMB_REL EXPRESION;
-
-LOGICA : EXPRESION SIMB_LOG EXPRESION;
-
-NOT: not EXPRESION;
-
-NEGATIVO: menos EXPRESION;
-
-UNARIO: EXPRESION menosMenos
-	|EXPRESION masMas;
-
-
-
+TAMANIO_ARREGLO: id punto tamanio;
 
 CONVERTIR_A_CADENA: convertirACadena abrePar EXPRESION cierraPar puntoComa;
 
 CONVERTIR_A_ENTERO: convertirAEntero abrePar EXPRESION cierraPar puntoComa;
 
 
-TERMINAL_EXPRESION: entero{var num = new Entero(); num.setNumero($1); $$= num;}
-	|decimal{var num = new Decimal(); num.setNumero($1); $$=num;}
-	|caracter{var car= new Caracter(); car.setValorCaracter($1); $$=car;}
-	|booleano{var bol= new Booleano(); bol.setValorBooleano($1); $$=bol;}
-	|abrePar EXPRESION cierraPar
-	|cadena
-	|nulo;
+
+INSERTA_LISTA: id punto insertar abrePar EXPRESION cierraPar;
+
+APILAR: id punto Apilar abrePar EXPRESION cierraPar;
+
+DESAPILAR: id punto Desapilar abrePar cierrPar;
+
+ENCOLAR: id punto Encolar abrePar EXPRESION cierraPar;
+
+DESENCOLAR: id punto Desencolar abrePar cierraPar;
 
 
-SIMB_ARIT: mas{$$ =$1;}
-	|menos{$$ = $1;}
-	|por{$$ = $1;}
-	|division{$$ = $1;}
-	|potencia{$$ = $1;};
+OBTENER_LISTA: id punto obtener abrePar EXPRESION cierraPar;
 
-SIMB_LOG: and{$$ =$1;}
-	|or{$$ =$1;}
-	|xor{$$ =$1;};
-
-SIMB_REL: menor{$$ =$1;}
-	|mayor{$$ =$1;}
-	|menorIgual{$$ =$1;}
-	|mayorIgual{$$ =$1;}
-	|igualIgual{$$ =$1;}
-	|igualIgual{$$ =$1;}
-	|distintoA{$$ =$1;};
-
-
-
-
-
-
-
-
-	
-	
+INDICE_LISTA: id punto buscar abrePar EXPRESION cierraPar ;
