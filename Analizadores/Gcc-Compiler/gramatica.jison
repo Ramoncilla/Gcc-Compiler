@@ -249,11 +249,6 @@ SENTENCIA: DECLARACION
 	|RETORNO
 	|CONTINUAR
 	|ESTRUCTURA
-	//|INSERTA_LISTA puntoComa
-	//|APILAR puntoComa
-	//|DESAPILAR puntoComa
-	//|ENCOLAR puntoComa
-	//|DESENCOLAR puntoComa
 	|DECLA_LISTA
 	|DECLA_PILA
 	|DECLA_COLA
@@ -303,9 +298,7 @@ ASIGNACION: id SIMB_IGUAL EXPRESION
 	|este punto id menosMenos
 	|este punto ACCESO masMas
 	|este punto ACCESO menosMenos
-	|este punto id COL_ARREGLO SIMB_IGUAL EXPRESION ;
-
-
+	|este punto id COL_ARREGLO SIMB_IGUAL EXPRESION;
 
 INSTANCIA: nuevo id PARAMETROS_LLAMADA;
 
@@ -319,6 +312,7 @@ SIMB_IGUAL: igual
 
 
 SI_FALSO: Es_falso CUERPO_FUNCION;
+
 SI_VERDADERO: Es_verdadero CUERPO_FUNCION;
 
 CUERPO_SI: abreLlave cierraLlave
@@ -331,9 +325,8 @@ CUERPO_SI: abreLlave cierraLlave
 
 SI: Si abrePar EXPRESION cierraPar CUERPO_SI;
 
-
-
 CASO: Es_igual_a EXPRESION dosPuntos  SENTENCIAS;
+
 DEFECTO: defecto dosPuntos SENTENCIAS;
 
 LISTA_CASOS: CASO
@@ -347,8 +340,6 @@ CUERPO_SWITCH: LISTA_CASOS DEFECTO
 
 SWITCH: Evaluar_si abrePar EXPRESION cierraPar abreLlave CUERPO_SWITCH cierraLlave
 	| Evaluar_si abrePar EXPRESION cierraPar abreLlave  cierraLlave;
-
-
 
 
 REPETIR_MIENTRAS: Repetir_Mientras abrePar EXPRESION cierraPar CUERPO_FUNCION;
@@ -368,10 +359,6 @@ ENCICLAR: Enciclar id CUERPO_FUNCION;
 CONTADOR: Contador abrePar EXPRESION cierraPar CUERPO_FUNCION;
 
 LEER_TECLADO: Leer_Teclado abrePar EXPRESION coma id cierraPar puntoComa;
-
-
-
-
 
 
 COL_ARREGLO: abreCor EXPRESION cierraCor
@@ -409,7 +396,6 @@ TIPO_DECLARACION: t_entero
 
 
 /*--------------------------- Expresion ----------------------------------*/
-
 
 
 EXPRESION: LOGICA;
@@ -458,21 +444,23 @@ VALOR: entero{var num = new Entero(); num.setNumero($1); $$= num;}
 	|decimal{var num = new Decimal(); num.setNumero($1); $$=num;}
 	|caracter{var car= new Caracter(); car.setValorCaracter($1); $$=car;}
 	|booleano{var bol= new Booleano(); bol.setValorBooleano($1); $$=bol;}
-	|abrePar EXPRESION cierraPar
-	|cadena
-	|nulo
+	|abrePar EXPRESION cierraPar{ $$=$1;}
+	|cadena {var n = new Cadena(); n.setCadena($1); $$=n;}
+	|nulo {var n = new Nulo(); n.setNulo(); $$=n;}
 	|CONVERTIR_CADENA
 	|CONVERTIR_ENTERO
-	//|TAMANIO_ARREGLO
-	|id VALOR2
+	|id {var i = new Id(); i.setValorId($1); $$= i;}
+	|id COL_ARREGLO{var i = new posArreglo(); i.setValores($1, $2); $$=i;}
+	|id PARAMETROS_LLAMADA {var i = new llamada(); i.setValoresLlamada($1, $2); $$= i;}
 	|ACCESO
-	|este punto ACCESO;	
-
-VALOR2: COL_ARREGLO
-|PARAMETROS_LLAMADA
-|;
+	|este punto ACCESO
+	|este punto id
+	|este punto id COL_ARREGLO
+	|este punto id PARAMETROS_LLAMADA
+	|CUERPO_ARREGLO;	
 
 ACCESO: id punto ATRI;
+
 
 ATRI_:id
 	|id COL_ARREGLO
@@ -493,11 +481,20 @@ ATRI: ATRI_
 LISTA_EXPRESIONES: EXPRESION
 	|LISTA_EXPRESIONES coma EXPRESION;
 
+
 PARAMETROS_LLAMADA : abrePar cierraPar
 	|abrePar LISTA_EXPRESIONES cierraPar;
 
 
-TAMANIO_ARREGLO: id punto tamanio;
+CUERPO_ARREGLO: abreLlave LISTA_CUERPO_ARREGLO cierraLlave;
+
+
+LISTA_CUERPO_ARREGLO: ELEMENTO_FILA
+	|LISTA_CUERPO_ARREGLO coma ELEMENTO_FILA;
+
+
+ELEMENTO_FILA : abreLlave LISTA_EXPRESIONES cierraLlave;
+	
 
 CONVERTIR_A_CADENA: convertirACadena abrePar EXPRESION cierraPar puntoComa;
 
@@ -505,17 +502,4 @@ CONVERTIR_A_ENTERO: convertirAEntero abrePar EXPRESION cierraPar puntoComa;
 
 
 
-INSERTA_LISTA: id punto insertar abrePar EXPRESION cierraPar;
 
-APILAR: id punto Apilar abrePar EXPRESION cierraPar;
-
-DESAPILAR: id punto Desapilar abrePar cierrPar;
-
-ENCOLAR: id punto Encolar abrePar EXPRESION cierraPar;
-
-DESENCOLAR: id punto Desencolar abrePar cierraPar;
-
-
-OBTENER_LISTA: id punto obtener abrePar EXPRESION cierraPar;
-
-INDICE_LISTA: id punto buscar abrePar EXPRESION cierraPar ;
