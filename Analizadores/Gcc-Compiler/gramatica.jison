@@ -144,22 +144,6 @@ id  ([a-zA-Z_])(([a-zA-Z_])|([0-9]))*
 
 
 
-%left or
-%left xor
-%left and
-%left not
-%left igualIgual distintoA menorIgual mayorIgual mayor menor
-%left mas menos
-%left por  division
-%left potencia
-%left masMas menosMenos
-%left abrePar
-
-
-
-
-
-
 %start INICIO
 
 %% /* language grammar */
@@ -453,7 +437,7 @@ SENTENCIA: DECLARACION{$$=$1;}
 	|ENCICLAR{$$=$1;}
 	|CONTADOR{$$=$1;}
 	|LEER_TECLADO{$$=$1;}
-	|ACCESO puntoComa
+	|ACCESO puntoComa{$$=$1;}
 	|ASIGNACION puntoComa{$$=$1;};
 
 
@@ -820,34 +804,133 @@ VALOR: entero{var num = new Entero(); num.setNumero($1); $$= num;}
 	|id {console.log($1); var idNuevo = new t_id(); idNuevo.setValorId($1); $$= idNuevo;}
 	|id COL_ARREGLO{var i = new PosArreglo(); i.setValores($1, $2); $$=i;}
 	|id PARAMETROS_LLAMADA {var i = new Llamada(); i.setValoresLlamada($1, $2); $$= i; console.log(i.getNombreFuncion()); console.log(i.getParametros());}
-	|ACCESO
-	|ESTE
+	|ACCESO {$$=$1;}
+	|ESTE {$$=$1;}
 	|CUERPO_ARREGLO{$$=$1;};	
 
-ACCESO: id punto ATRI;
+ACCESO: id punto ATRI
+	{
+		var a = new Acceso();
+		a.setValores($1,$3);
+		$$=a;
+	};
 
-ESTE:este punto ACCESO
+ESTE:este punto ACCESO 
+		{
+			var a = new Este();
+			a.setValores($3);
+			$$=a;
+		}
 	|este punto id
+		{
+			var a = new t_id();
+			a.setValorId($3);
+			var b = new Este();
+			b.setValores(a);
+			$$=b;
+		}
+
 	|este punto id COL_ARREGLO
-	|este punto id PARAMETROS_LLAMADA;
+		{
+			var a = new PosArreglo();
+			a.setValores($3,$4);
+			var b = new Este();
+			b.setValores(a);
+			$$=b;
+		}
+	|este punto id PARAMETROS_LLAMADA
+		{
+			var a = new Llamada();
+			a.setValoresLlamada($3,$4);
+			var b= new Este();
+			b.setValores(a);
+			$$=b;
+		};
 
 
 
 ATRI_:id
+		{
+			var a = new t_id();
+			a.setValorId($1);
+			$$=a;
+		}
 	|id COL_ARREGLO
+		{
+			var a = new PosArreglo();
+			a.setValores($1,$2);
+			$$=a;
+		}
 	|id PARAMETROS_LLAMADA
+		{
+			var a = new Llamada();
+			a.setValoresLlamada($1,$2);
+			$$=a;
+		}
 	|insertar abrePar EXPRESION cierraPar
+		{
+			var a = new FuncionNativa();
+			a.setValores($1, $3);
+			$$=a;
+		}
 	|Apilar abrePar EXPRESION cierraPar
+		{
+			var a = new FuncionNativa();
+			a.setValores($1, $3);
+			$$=a;
+		}
 	|Desapilar abrePar cierrPar
+		{
+			var a = new FuncionNativa();
+			a.setValores($1, $3);
+			$$=a;
+		}
 	|Encolar abrePar EXPRESION cierraPar
+		{
+			var a = new FuncionNativa();
+			a.setValores($1, $3);
+			$$=a;
+		}
 	|Desencolar abrePar cierraPar
+		{
+			var a = new FuncionNativa();
+			a.setValores($1, $3);
+			$$=a;
+		}
 	|obtener abrePar EXPRESION cierraPar
+		{
+			var a = new FuncionNativa();
+			a.setValores($1, $3);
+			$$=a;
+		}
 	|buscar abrePar EXPRESION cierraPar
-	|tamanio;
+		{
+			var a = new FuncionNativa();
+			a.setValores($1, $3);
+			$$=a;
+		}
+	|tamanio
+		{
+			var a = new FuncionNativa();
+			a.setValores($1, null);
+			$$=a;
+		};
 	
 
-ATRI: ATRI_ 
-	|ATRI punto ATRI_;
+ATRI: ATRI_
+		{
+			var a = [];
+			a.push($1);
+			$$=a;
+
+		} 
+	|ATRI punto ATRI_
+		{
+			var a = $1;
+			a.push($3);
+			$$=a;
+
+		};
 
 
 LISTA_EXPRESIONES: EXPRESION { var arreglo = []; var g= arreglo.push($1); console.log("size "+ g); $$= arreglo;}

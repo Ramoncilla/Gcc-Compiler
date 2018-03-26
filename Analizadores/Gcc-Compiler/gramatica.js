@@ -105,7 +105,7 @@ case 3: case 12: case 50: case 115:
 			this.$=a;
 		
 break;
-case 4: case 5: case 13: case 14: case 15: case 16: case 17: case 51: case 52: case 53: case 54: case 55: case 56: case 57: case 58: case 59: case 60: case 61: case 62: case 63: case 64: case 65: case 66: case 67: case 68: case 69: case 70: case 144: case 145: case 147: case 149: case 151: case 153: case 155: case 164: case 167: case 169: case 172: case 174: case 183: case 189:
+case 4: case 5: case 13: case 14: case 15: case 16: case 17: case 51: case 52: case 53: case 54: case 55: case 56: case 57: case 58: case 59: case 60: case 61: case 62: case 63: case 64: case 65: case 66: case 67: case 68: case 69: case 70: case 144: case 145: case 147: case 149: case 151: case 153: case 155: case 164: case 167: case 169: case 172: case 174: case 183: case 187: case 188: case 189:
 this.$=$$[$0];
 break;
 case 6:
@@ -227,7 +227,7 @@ case 38:
 			this.$=a;
 		
 break;
-case 39: case 72: case 212:
+case 39: case 71: case 72: case 212:
 this.$=$$[$0-1];
 break;
 case 41:
@@ -709,6 +709,105 @@ var i = new PosArreglo(); i.setValores($$[$0-1], $$[$0]); this.$=i;
 break;
 case 186:
 var i = new Llamada(); i.setValoresLlamada($$[$0-1], $$[$0]); this.$= i; console.log(i.getNombreFuncion()); console.log(i.getParametros());
+break;
+case 190:
+
+		var a = new Acceso();
+		a.setValores($$[$0-2],$$[$0]);
+		this.$=a;
+	
+break;
+case 191:
+
+			var a = new Este();
+			a.setValores($$[$0]);
+			this.$=a;
+		
+break;
+case 192:
+
+			var a = new t_id();
+			a.setValorId($$[$0]);
+			var b = new Este();
+			b.setValores(a);
+			this.$=b;
+		
+break;
+case 193:
+
+			var a = new PosArreglo();
+			a.setValores($$[$0-1],$$[$0]);
+			var b = new Este();
+			b.setValores(a);
+			this.$=b;
+		
+break;
+case 194:
+
+			var a = new Llamada();
+			a.setValoresLlamada($$[$0-1],$$[$0]);
+			var b= new Este();
+			b.setValores(a);
+			this.$=b;
+		
+break;
+case 195:
+
+			var a = new t_id();
+			a.setValorId($$[$0]);
+			this.$=a;
+		
+break;
+case 196:
+
+			var a = new PosArreglo();
+			a.setValores($$[$0-1],$$[$0]);
+			this.$=a;
+		
+break;
+case 197:
+
+			var a = new Llamada();
+			a.setValoresLlamada($$[$0-1],$$[$0]);
+			this.$=a;
+		
+break;
+case 198: case 199: case 201: case 203: case 204:
+
+			var a = new FuncionNativa();
+			a.setValores($$[$0-3], $$[$0-1]);
+			this.$=a;
+		
+break;
+case 200: case 202:
+
+			var a = new FuncionNativa();
+			a.setValores($$[$0-2], $$[$0]);
+			this.$=a;
+		
+break;
+case 205:
+
+			var a = new FuncionNativa();
+			a.setValores($$[$0], null);
+			this.$=a;
+		
+break;
+case 206:
+
+			var a = [];
+			a.push($$[$0]);
+			this.$=a;
+
+		
+break;
+case 207:
+
+			var a = $$[$0-2];
+			a.push($$[$0]);
+			this.$=a;
+
+		
 break;
 case 208:
  var arreglo = []; var g= arreglo.push($$[$0]); console.log("size "+ g); this.$= arreglo;
