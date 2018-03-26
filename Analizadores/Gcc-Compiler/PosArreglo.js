@@ -6,26 +6,26 @@ function PosArreglo(){
 }
 
 
-posArreglo.prototype.nombreArreglo="";
-posArreglo.prototype.posicionesArreglo=[];
+PosArreglo.prototype.nombreArreglo="";
+PosArreglo.prototype.posicionesArreglo=[];
 
 
-posArreglo.prototype.setValores = function(nombre, posiciones) {
+PosArreglo.prototype.setValores = function(nombre, posiciones) {
 	// body...
-	posArreglo.prototype.nombreArreglo=nombre;
-	posArreglo.prototype.posicionesArreglo= posiciones;
+	PosArreglo.prototype.nombreArreglo=nombre;
+	PosArreglo.prototype.posicionesArreglo= posiciones;
 };
 
 
-posArreglo.prototype.getNombreArreglo = function() {
+PosArreglo.prototype.getNombreArreglo = function() {
 	
-	return posArreglo.prototype.nombreArreglo;
+	return PosArreglo.prototype.nombreArreglo;
 };
 
 
-posArreglo.prototype.getPosicionesArreglo = function() {
+PosArreglo.prototype.getPosicionesArreglo = function() {
 	// body...
-	return posArreglo.prototype.posicionesArreglo;
+	return PosArreglo.prototype.posicionesArreglo;
 };
 
 
