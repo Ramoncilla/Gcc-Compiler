@@ -10,7 +10,7 @@ Id.prototype.setValorId = function(valor) {
  	Id.prototype.nombreId=valor;
 };
 
-id.prototype.getValorId= function(){
+Id.prototype.getValorId= function(){
 	return Id.prototype.nombreId;
 };
 

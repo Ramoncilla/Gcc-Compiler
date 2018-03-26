@@ -1,3 +1,4 @@
+
 function Booleano(){
 	this.valorCadenaBooleano = "false";
 	this.valorEnteroBooleano=0;

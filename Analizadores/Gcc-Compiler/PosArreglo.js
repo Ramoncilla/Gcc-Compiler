@@ -1,5 +1,5 @@
 
-function posArreglo(){
+function PosArreglo(){
 
 	this.nombreArreglo="";
 	this.posicionesArreglo =[];

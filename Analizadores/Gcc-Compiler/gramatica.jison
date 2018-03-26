@@ -1,5 +1,6 @@
 
 
+
 /* description: Parses end executes mathematical expressions. */
 
 /* lexical grammar */
@@ -398,22 +399,22 @@ TIPO_DECLARACION: t_entero
 /*--------------------------- Expresion ----------------------------------*/
 
 
-EXPRESION: LOGICA;
+EXPRESION: LOGICA{$$=$1;};
 
 LOGICA: LOGICA or XOR
-	|XOR;
+	|XOR{$$=$1;};
 
 XOR: XOR xor AND
-	|AND;
+	|AND{$$=$1;};
 
 AND: AND and NOT
-	|NOT;
+	|NOT{$$=$1;};
 
 NOT: not REL
-	|REL;
+	|REL{$$=$1;};
 
 REL: ARITMETICA SIMB_REL ARITMETICA
-	|ARITMETICA;
+	|ARITMETICA{$$=$1;};
 
 SIMB_REL: menor
 	|mayor
@@ -424,21 +425,21 @@ SIMB_REL: menor
 
 ARITMETICA: ARITMETICA mas MUL
 	|ARITMETICA menos MUL
-	|MUL;
+	|MUL{$$=$1;};
 
 MUL: MUL por POT
 	|MUL division POT
-	|POT;
+	|POT{$$=$1;};
 
 POT: UNARIO potencia POT
-	|UNARIO;
+	|UNARIO{$$=$1;};
 
 UNARIO: NEG masMas
 	|NEG menosMenos
-	|NEG;	
+	|NEG{$$=$1;};	
 
 NEG: menos VALOR
-	|VALOR;
+	|VALOR{$$=$1;};
 
 VALOR: entero{var num = new Entero(); num.setNumero($1); $$= num;}
 	|decimal{var num = new Decimal(); num.setNumero($1); $$=num;}
@@ -447,19 +448,22 @@ VALOR: entero{var num = new Entero(); num.setNumero($1); $$= num;}
 	|abrePar EXPRESION cierraPar{ $$=$1;}
 	|cadena {var n = new Cadena(); n.setCadena($1); $$=n;}
 	|nulo {var n = new Nulo(); n.setNulo(); $$=n;}
-	|CONVERTIR_CADENA
-	|CONVERTIR_ENTERO
-	|id {var i = new Id(); i.setValorId($1); $$= i;}
-	|id COL_ARREGLO{var i = new posArreglo(); i.setValores($1, $2); $$=i;}
-	|id PARAMETROS_LLAMADA {var i = new llamada(); i.setValoresLlamada($1, $2); $$= i;}
+	|CONVERTIR_CADENA{$$=S1;}
+	|CONVERTIR_ENTERO{$$=$1;}
+	|id {console.log($1); var idNuevo = new t_id(); idNuevo.setValorId($1); $$= idNuevo;}
+	|id COL_ARREGLO{var i = new PosArreglo(); i.setValores($1, $2); $$=i;}
+	|id PARAMETROS_LLAMADA {var i = new Llamada(); i.setValoresLlamada($1, $2); $$= i; console.log(i.getNombreFuncion()); console.log(i.getParametros());}
 	|ACCESO
-	|este punto ACCESO
-	|este punto id
-	|este punto id COL_ARREGLO
-	|este punto id PARAMETROS_LLAMADA
-	|CUERPO_ARREGLO;	
+	|ESTE
+	|CUERPO_ARREGLO{$$=$1;};	
 
 ACCESO: id punto ATRI;
+
+ESTE:este punto ACCESO
+	|este punto id
+	|este punto id COL_ARREGLO
+	|este punto id PARAMETROS_LLAMADA;
+
 
 
 ATRI_:id
@@ -478,27 +482,31 @@ ATRI_:id
 ATRI: ATRI_ 
 	|ATRI punto ATRI_;
 
-LISTA_EXPRESIONES: EXPRESION
-	|LISTA_EXPRESIONES coma EXPRESION;
+
+LISTA_EXPRESIONES: EXPRESION { var arreglo = []; var g= arreglo.push($1); console.log("size "+ g); $$= arreglo;}
+	|LISTA_EXPRESIONES coma EXPRESION{var arreglo = $1; var g= arreglo.push($3); console.log("size "+ g);; $$= arreglo;};
+}
 
 
-PARAMETROS_LLAMADA : abrePar cierraPar
-	|abrePar LISTA_EXPRESIONES cierraPar;
+PARAMETROS_LLAMADA : abrePar cierraPar{$$= [];}
+	|abrePar LISTA_EXPRESIONES cierraPar{$$=$2; console.log($2);};
+}
 
 
-CUERPO_ARREGLO: abreLlave LISTA_CUERPO_ARREGLO cierraLlave;
+CUERPO_ARREGLO: abreLlave LISTA_CUERPO_ARREGLO cierraLlave{$$=$2;};
 
 
-LISTA_CUERPO_ARREGLO: ELEMENTO_FILA
-	|LISTA_CUERPO_ARREGLO coma ELEMENTO_FILA;
+LISTA_CUERPO_ARREGLO: ELEMENTO_FILA{var arreglo = []; arreglo.push($1); $$= arreglo;}
+	|LISTA_CUERPO_ARREGLO coma ELEMENTO_FILA{var arreglo= $1; arreglo.push($3); $$=arreglo;};
+}
 
 
-ELEMENTO_FILA : abreLlave LISTA_EXPRESIONES cierraLlave;
+ELEMENTO_FILA : abreLlave LISTA_EXPRESIONES cierraLlave{$$= $2;};
 	
 
-CONVERTIR_A_CADENA: convertirACadena abrePar EXPRESION cierraPar puntoComa;
+CONVERTIR_A_CADENA: convertirACadena abrePar EXPRESION cierraPar puntoComa{var a = new convertirCadena(); a.setExpresionCadena($3); $$= a;};
 
-CONVERTIR_A_ENTERO: convertirAEntero abrePar EXPRESION cierraPar puntoComa;
+CONVERTIR_A_ENTERO: convertirAEntero abrePar EXPRESION cierraPar puntoComa{var a = new convertirEntero(); a.setExpresionEntero($3); $$=a;};
 
 
 
